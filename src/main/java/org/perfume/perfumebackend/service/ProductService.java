@@ -13,13 +13,13 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
 
-    ProductDao productDao;
-    ProductMapper productMapper;
+    private final ProductDao productDao;
+    private final ProductMapper productMapper;
 
-//    public ProductService(ProductDao productDao, ProductMapper productMapper) {
-//        this.productDao = productDao;
-//        this.productMapper = productMapper;
-//    }
+    public ProductService(ProductDao productDao, ProductMapper productMapper) {
+        this.productDao = productDao;
+        this.productMapper = productMapper;
+    }
 
     public List<ProductDto> findAll(int page, int size) {
         List<Product> products = productDao.findAll()
@@ -85,10 +85,4 @@ public class ProductService {
         productDao.deleteById(id);
     }
 
-    public void updateProductImage(Long productId, String imageUrl) {
-        Product team = productDao.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Team not found with id: " + productId));
-        team.setImageUrl(imageUrl);
-        productDao.update(team);
-    }
 }
