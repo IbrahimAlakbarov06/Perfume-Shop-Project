@@ -84,4 +84,11 @@ public class ProductService {
         findById(id);
         productDao.deleteById(id);
     }
+
+    public void updateProductImage(Long productId, String imageUrl) {
+        Product team = productDao.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Team not found with id: " + productId));
+        team.setImageUrl(imageUrl);
+        productDao.update(team);
+    }
 }
