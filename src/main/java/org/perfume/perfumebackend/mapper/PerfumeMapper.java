@@ -1,18 +1,18 @@
 package org.perfume.perfumebackend.mapper;
 
-import org.perfume.perfumebackend.dto.ProductDto;
-import org.perfume.perfumebackend.entity.Product;
+import org.perfume.perfumebackend.dto.PerfumeDto;
+import org.perfume.perfumebackend.entity.Perfume;
 import org.springframework.stereotype.Component;
 
-@Component
-public class ProductMapper {
+@Component // Ensure this annotation is present
+public class PerfumeMapper {
 
-    public ProductDto toDto(Product product) {
+    public PerfumeDto toDto(Perfume product) {
         if (product == null) {
             return null;
         }
 
-        return new ProductDto(
+        return new PerfumeDto(
                 product.getId(),
                 product.getName(),
                 product.getDescription(),
@@ -24,12 +24,12 @@ public class ProductMapper {
         );
     }
 
-    public Product toEntity(ProductDto productDto) {
+    public Perfume toEntity(PerfumeDto productDto) {
         if (productDto == null) {
             return null;
         }
 
-        return new Product(
+        return new Perfume(
                 productDto.getId(),
                 productDto.getName(),
                 productDto.getDescription(),
