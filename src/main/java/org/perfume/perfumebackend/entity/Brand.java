@@ -4,18 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Perfume {
+public class Brand {
     private Long id;
     private String name;
     private String description;
-    private BigDecimal price;
-    private Integer volumeMl;
-    private String brandName;
-    private String categoryName;
-    private Integer stockQuantity;
-    private String imageUrl;
+    private String country;
+    private String foundedYear;
+    private String logoUrl;
 }

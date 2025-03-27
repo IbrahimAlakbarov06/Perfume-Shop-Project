@@ -17,25 +17,24 @@ public class PerfumeDao {
 
     public Perfume save(Perfume perfume) {
         try (Connection connection = DatabaseConnection.getConnection()) {
-            String sql = "INSERT INTO perfumes (name, description, price, brand_name, category_name, stock_quantity, image_url) VALUES (?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO perfumes (name, description, price, volumeMl, brand_name, category_name, stock_quantity, image_url) VALUES (?,?,?,?,?,?,?,?)";
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, perfume.getName());
             preparedStatement.setString(2, perfume.getDescription());
             preparedStatement.setBigDecimal(3, perfume.getPrice());
-            preparedStatement.setString(4, perfume.getBrandName());
-            preparedStatement.setString(5, perfume.getCategoryName());
-            preparedStatement.setInt(6, perfume.getStockQuantity());
-            preparedStatement.setString(7, perfume.getImageUrl());
+            preparedStatement.setInt(4, perfume.getVolumeMl());
+            preparedStatement.setString(5, perfume.getBrandName());
+            preparedStatement.setString(6, perfume.getCategoryName());
+            preparedStatement.setInt(7, perfume.getStockQuantity());
+            preparedStatement.setString(8, perfume.getImageUrl());
 
             int rowsAffected = preparedStatement.executeUpdate();
 
             if (rowsAffected > 0) {
-                // Retrieve the generated keys
                 try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        // Set the auto-generated ID to the perfume
                         long generatedId = generatedKeys.getLong(1);
                         perfume.setId(generatedId);
                     }
@@ -103,17 +102,18 @@ public class PerfumeDao {
 
     public void update(Perfume perfume) {
         try (Connection connection = DatabaseConnection.getConnection()){
-            String sql = "UPDATE perfumes SET name=?, description=?, price=?, brand_name=?, category_name=?, stock_quantity=?, image_url =? WHERE id=?";
+            String sql = "UPDATE perfumes SET name=?, description=?, price=?,volumeMl=?, brand_name=?, category_name=?, stock_quantity=?, image_url =? WHERE id=?";
 
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, perfume.getName());
             preparedStatement.setString(2, perfume.getDescription());
             preparedStatement.setBigDecimal(3, perfume.getPrice());
-            preparedStatement.setString(4, perfume.getBrandName());
-            preparedStatement.setString(5, perfume.getCategoryName());
-            preparedStatement.setInt(6, perfume.getStockQuantity());
-            preparedStatement.setString(7, perfume.getImageUrl());
-            preparedStatement.setLong(8, perfume.getId());
+            preparedStatement.setInt(4, perfume.getVolumeMl());
+            preparedStatement.setString(5, perfume.getBrandName());
+            preparedStatement.setString(6, perfume.getCategoryName());
+            preparedStatement.setInt(7, perfume.getStockQuantity());
+            preparedStatement.setString(8, perfume.getImageUrl());
+            preparedStatement.setLong(9, perfume.getId());
 
             int updatedRow = preparedStatement.executeUpdate();
 
@@ -131,6 +131,7 @@ public class PerfumeDao {
                 rs.getString("name"),
                 rs.getString("description"),
                 rs.getBigDecimal("price"),
+                rs.getInt("volumeMl"),
                 rs.getString("brand_name"),
                 rs.getString("category_name"),
                 rs.getInt("stock_quantity"),

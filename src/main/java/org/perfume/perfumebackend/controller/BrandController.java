@@ -1,8 +1,9 @@
 package org.perfume.perfumebackend.controller;
 
+import org.perfume.perfumebackend.dto.BrandDto;
 import org.perfume.perfumebackend.dto.PerfumeDto;
 import org.perfume.perfumebackend.exception.ResourceNotFoundException;
-import org.perfume.perfumebackend.service.PerfumeService;
+import org.perfume.perfumebackend.service.BrandService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -23,82 +24,68 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v2/perfumes")
-public class PerfumeController {
+@RequestMapping("/api/v2/brands")
+public class BrandController {
+
+    private final BrandService brandService;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    private final PerfumeService perfumeService;
-
-    public PerfumeController(PerfumeService perfumeService) {
-        this.perfumeService = perfumeService;
+    public BrandController(BrandService brandService) {
+        this.brandService = brandService;
     }
 
     @GetMapping
-    public ResponseEntity<List<PerfumeDto>> getAllPerfumes(
+    public ResponseEntity<List<BrandDto>> getAllBrands(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        List<PerfumeDto> perfumes = perfumeService.findAll(page, size);
-        return ResponseEntity.ok(perfumes);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<PerfumeDto> getPerfumeById(@PathVariable Long id) {
-        PerfumeDto perfume = perfumeService.findById(id);
-        return ResponseEntity.ok(perfume);
-    }
-
-    @GetMapping("/search")
-    public ResponseEntity<List<PerfumeDto>> searchPerfumes(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String brandName,
-            @RequestParam(required = false) String categoryName,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
-        List<PerfumeDto> perfumes = perfumeService.searchPerfumes(name, brandName, categoryName, page, size);
-        return ResponseEntity.ok(perfumes);
-    }
-
-    @GetMapping("/categories")
-    public ResponseEntity<List<String>> getAllCategories() {
-        List<String> categories = perfumeService.findAllCategories();
-        return ResponseEntity.ok(categories);
-    }
-
-    @GetMapping("/brands")
-    public ResponseEntity<List<String>> getAllBrands() {
-        List<String> brands = perfumeService.findAllBrands();
+        List<BrandDto> brands = brandService.findAll(page, size);
         return ResponseEntity.ok(brands);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<BrandDto> getBrandById(@PathVariable Long id) {
+        BrandDto brand = brandService.findById(id);
+        return ResponseEntity.ok(brand);
+    }
+
+    @GetMapping("/{id}/perfumes")
+    public ResponseEntity<List<PerfumeDto>> getPerfumesByBrand(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        List<PerfumeDto> perfumes = brandService.findPerfumesByBrand(id, page, size);
+        return ResponseEntity.ok(perfumes);
+    }
+
     @PostMapping
-    public ResponseEntity<PerfumeDto> createPerfume(@RequestBody PerfumeDto perfumeDto) {
-        PerfumeDto createdPerfume = perfumeService. save(perfumeDto);
-        return new ResponseEntity<>(createdPerfume, HttpStatus.CREATED);
+    public ResponseEntity<BrandDto> createBrand(@RequestBody BrandDto brandDto) {
+        BrandDto createdBrand = brandService.save(brandDto);
+        return new ResponseEntity<>(createdBrand, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PerfumeDto> updatePerfume(
+    public ResponseEntity<BrandDto> updateBrand(
             @PathVariable Long id,
-            @RequestBody PerfumeDto perfumeDto
+            @RequestBody BrandDto brandDto
     ) {
-        perfumeDto.setId(id);
-        PerfumeDto updatedPerfume = perfumeService.update(perfumeDto);
-        return ResponseEntity.ok(updatedPerfume);
+        brandDto.setId(id);
+        BrandDto updatedBrand = brandService.update(brandDto);
+        return ResponseEntity.ok(updatedBrand);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePerfume(@PathVariable Long id) {
-        perfumeService.deleteById(id);
+    public ResponseEntity<Void> deleteBrand(@PathVariable Long id) {
+        brandService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/upload-image/{perfumeId}")
-    public ResponseEntity<String> uploadImage(
-            @PathVariable Long perfumeId,
+    @PostMapping("/upload-logo/{brandId}")
+    public ResponseEntity<String> uploadLogo(
+            @PathVariable Long brandId,
             @RequestParam("file") MultipartFile file
     ) {
         try {
@@ -114,26 +101,26 @@ public class PerfumeController {
             Path targetLocation = uploadPath.resolve(uniqueFilename);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            String imageUrl = "/api/v2/perfumes/images/" + uniqueFilename;
-            perfumeService.updatePerfumeImage(perfumeId, imageUrl);
+            String logoUrl = "/api/v2/brands/logos/" + uniqueFilename;
+            brandService.updateBrandLogo(brandId, logoUrl);
 
-            return ResponseEntity.ok(imageUrl);
+            return ResponseEntity.ok(logoUrl);
         } catch (IOException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Could not upload image: " + ex.getMessage());
+                    .body("Could not upload logo: " + ex.getMessage());
         }
     }
 
-    @GetMapping("/images/{id}")
-    public ResponseEntity<Resource> getPerfumeImage(@PathVariable Long id) {
+    @GetMapping("/logos/{id}")
+    public ResponseEntity<Resource> getBrandLogo(@PathVariable Long id) {
         try {
-            PerfumeDto perfume = perfumeService.findById(id);
+            BrandDto brand = brandService.findById(id);
 
-            if (perfume.getImageUrl() == null) {
+            if (brand.getLogoUrl() == null) {
                 return ResponseEntity.notFound().build();
             }
 
-            String filename = Paths.get(perfume.getImageUrl()).getFileName().toString();
+            String filename = Paths.get(brand.getLogoUrl()).getFileName().toString();
 
             Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
             Path filePath = uploadPath.resolve(filename).normalize();
