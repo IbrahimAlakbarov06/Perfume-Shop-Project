@@ -9,11 +9,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name="brands")
-public class Brand {
+@Table(name = "categories")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,8 +23,7 @@ public class Brand {
 
     private String description;
 
-    private String logoUrl;
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private Set<Perfume> perfumes = new HashSet<>();
 
-    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL)
-    private Set<Perfume> perfume = new HashSet<>();
 }

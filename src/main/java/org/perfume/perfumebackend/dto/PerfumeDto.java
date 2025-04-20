@@ -9,13 +9,4 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PerfumeDto {
-    private Long id;
-    private String name;
-    private String description;
-    private BigDecimal price;
-    private Integer volumeMl;
-    private String brandName;
-    private String categoryName;
-    private Integer stockQuantity;
-    private String imageUrl;
 }

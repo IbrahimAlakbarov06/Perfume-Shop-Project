@@ -1,9 +1,9 @@
 package org.perfume.perfumebackend.dao;
 
-import org.perfume.perfumebackend.entity.Perfume;
+import org.perfume.perfumebackend.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PerfumeDao extends JpaRepository<Perfume, Long> {
+public interface CategoryDao extends JpaRepository<Category, Long> {
 }

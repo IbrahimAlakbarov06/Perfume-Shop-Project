@@ -1,4 +1,4 @@
 package org.perfume.perfumebackend.service;
 
-public class PerfumeService {
+public class CategoryService {
 }

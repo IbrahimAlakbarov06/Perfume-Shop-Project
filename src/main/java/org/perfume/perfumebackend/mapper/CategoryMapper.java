@@ -1,5 +1,4 @@
 package org.perfume.perfumebackend.mapper;
 
-public class PerfumeMapper {
-
+public class CategoryMapper {
 }

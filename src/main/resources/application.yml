@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: java-backend-course
+  datasource:
+    url: jdbc:postgresql://localhost:5432/perfume_shop
+    username: postgres
+    password: 123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
