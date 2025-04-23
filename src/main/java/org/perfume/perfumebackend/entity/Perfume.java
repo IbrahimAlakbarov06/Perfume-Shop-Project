@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.perfume.perfumebackend.enums.FragranceFamily;
+import org.perfume.perfumebackend.enums.Gender;
 
 import java.math.BigDecimal;
 
@@ -40,7 +42,9 @@ public class Perfume {
 
     private String imageUrl;
 
-    private String fragrance;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private FragranceFamily fragranceFamily;;
 }

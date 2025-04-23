@@ -1,6 +1,8 @@
 package org.perfume.perfumebackend.dao;
 
 import org.perfume.perfumebackend.entity.Perfume;
+import org.perfume.perfumebackend.enums.FragranceFamily;
+import org.perfume.perfumebackend.enums.Gender;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -27,10 +29,10 @@ public interface PerfumeDao extends JpaRepository<Perfume, Long> {
     List<Perfume> findByBrand_NameIgnoreCaseAndPriceBetween(String brandName, BigDecimal minPrice, BigDecimal maxPrice);
 
     // Find by gender
-    List<Perfume> findByGenderIgnoreCase(String gender);
+    List<Perfume> findByGenderIgnoreCase(Gender gender);
 
     // Find by fragrance type
-    List<Perfume> findByFragranceContainingIgnoreCase(String fragrance);
+    List<Perfume> findByFragranceContainingIgnoreCase(FragranceFamily fragrance);
 
     // Stock availability
     List<Perfume> findByStockQuantityGreaterThan(Integer minStock);

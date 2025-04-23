@@ -33,7 +33,7 @@ public class PerfumeMapper {
 
         dto.setStockQuantity(perfume.getStockQuantity());
         dto.setImageUrl(perfume.getImageUrl());
-        dto.setFragrance(perfume.getFragrance());
+        dto.setFragranceFamily(perfume.getFragranceFamily());
         dto.setGender(perfume.getGender());
 
         return dto;
@@ -54,7 +54,7 @@ public class PerfumeMapper {
         perfume.setCategory(category);
         perfume.setStockQuantity(dto.getStockQuantity());
         perfume.setImageUrl(dto.getImageUrl());
-        perfume.setFragrance(dto.getFragrance());
+        perfume.setFragranceFamily(dto.getFragranceFamily());
         perfume.setGender(dto.getGender());
 
         return perfume;

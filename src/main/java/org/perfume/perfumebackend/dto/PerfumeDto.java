@@ -3,6 +3,8 @@ package org.perfume.perfumebackend.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.perfume.perfumebackend.enums.FragranceFamily;
+import org.perfume.perfumebackend.enums.Gender;
 
 import java.math.BigDecimal;
 
@@ -21,6 +23,6 @@ public class PerfumeDto {
     private String categoryName;
     private Integer stockQuantity;
     private String imageUrl;
-    private String fragrance;
-    private String gender;
+    private Gender gender;
+    private FragranceFamily fragranceFamily;
 }
