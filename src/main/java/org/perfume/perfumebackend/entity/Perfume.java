@@ -47,5 +47,4 @@ public class Perfume {
 
     @Enumerated(EnumType.STRING)
     private FragranceFamily fragranceFamily;
-
 }
