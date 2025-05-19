@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PerfumeDto {
+public class PerfumeResponse {
     private Long id;
     private String name;
     private String description;

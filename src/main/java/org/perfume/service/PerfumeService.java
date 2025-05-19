@@ -1,28 +1,16 @@
 package org.perfume.service;
 
 import lombok.RequiredArgsConstructor;
-<<<<<<< HEAD
-import org.perfume.dao.BrandDao;
-import org.perfume.dao.CategoryDao;
-import org.perfume.dao.PerfumeDao;
-import org.perfume.dto.request.PerfumeRequest;
-import org.perfume.dto.response.PerfumeResponse;
-import org.perfume.entity.Brand;
-import org.perfume.entity.Category;
-import org.perfume.entity.Perfume;
-import org.perfume.enums.FragranceFamily;
-import org.perfume.enums.Gender;
-=======
+
 import org.perfume.domain.repo.BrandDao;
 import org.perfume.domain.repo.CategoryDao;
 import org.perfume.domain.repo.PerfumeDao;
-import org.perfume.model.dto.response.PerfumeDto;
+import org.perfume.model.dto.response.PerfumeResponse;
 import org.perfume.domain.entity.Brand;
 import org.perfume.domain.entity.Category;
 import org.perfume.domain.entity.Perfume;
 import org.perfume.model.enums.FragranceFamily;
 import org.perfume.model.enums.Gender;
->>>>>>> 37e4850 (packages updated)
 import org.perfume.exception.ResourceNotFoundException;
 import org.perfume.mapper.PerfumeMapper;
 import org.springframework.stereotype.Service;

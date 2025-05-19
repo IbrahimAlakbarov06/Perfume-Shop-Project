@@ -1,16 +1,10 @@
 package org.perfume.service;
 
 import lombok.RequiredArgsConstructor;
-<<<<<<< HEAD
-import org.perfume.dao.CategoryDao;
-import org.perfume.dto.request.CategoryRequest;
-import org.perfume.dto.response.CategoryResponse;
-import org.perfume.entity.Category;
-=======
+
 import org.perfume.domain.repo.CategoryDao;
-import org.perfume.model.dto.response.CategoryDto;
+import org.perfume.model.dto.response.CategoryResponse;
 import org.perfume.domain.entity.Category;
->>>>>>> 37e4850 (packages updated)
 import org.perfume.exception.ResourceNotFoundException;
 import org.perfume.mapper.CategoryMapper;
 import org.springframework.stereotype.Service;
