@@ -1,4 +1,4 @@
-package org.perfume.response;
+package org.perfume.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
