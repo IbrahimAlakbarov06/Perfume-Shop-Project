@@ -46,5 +46,5 @@ public class Perfume {
     private Gender gender;
 
     @Enumerated(EnumType.STRING)
-    private FragranceFamily fragranceFamily;;
+    private FragranceFamily fragranceFamily;
 }
