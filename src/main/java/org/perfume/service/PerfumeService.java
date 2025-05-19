@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.perfume.dao.BrandDao;
 import org.perfume.dao.CategoryDao;
 import org.perfume.dao.PerfumeDao;
-import org.perfume.dto.PerfumeDto;
+import org.perfume.dto.request.PerfumeRequest;
+import org.perfume.dto.response.PerfumeResponse;
 import org.perfume.entity.Brand;
 import org.perfume.entity.Category;
 import org.perfume.entity.Perfume;
@@ -28,69 +29,68 @@ public class PerfumeService {
     private final BrandDao brandDao;
     private final PerfumeMapper perfumeMapper;
 
-    public List<PerfumeDto> getAllPerfumes() {
+    public List<PerfumeResponse> getAllPerfumes() {
         return perfumeDao.findAll().stream()
-                .map(perfumeMapper::toDto)
+                .map(perfumeMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
-    public PerfumeDto getPerfumeById(Long id) {
+    public PerfumeResponse getPerfumeById(Long id) {
         Perfume perfume = perfumeDao.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Perfume with id " + id + " not found"));
-        return perfumeMapper.toDto(perfume);
+        return perfumeMapper.toResponse(perfume);
     }
 
-    public List<PerfumeDto> getPerfumesByBrandId(Long brandId) {
+    public List<PerfumeResponse> getPerfumesByBrandId(Long brandId) {
         if (!brandDao.existsById(brandId)) {
             throw new ResourceNotFoundException("Brand not found with id: " + brandId);
         }
 
         return perfumeDao.findByBrand_Id(brandId).stream()
-                .map(perfumeMapper::toDto)
+                .map(perfumeMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
-    public List<PerfumeDto> getPerfumesByBrandName(String brandName) {
+    public List<PerfumeResponse> getPerfumesByBrandName(String brandName) {
         if (!brandDao.existsByNameIgnoreCase(brandName)) {
             throw new ResourceNotFoundException("Brand not found with name: " + brandName);
         }
 
         return perfumeDao.findByBrand_NameIgnoreCase(brandName).stream()
-                .map(perfumeMapper::toDto)
+                .map(perfumeMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
-    public List<PerfumeDto> getPerfumesByCategoryId(Long categoryId) {
+    public List<PerfumeResponse> getPerfumesByCategoryId(Long categoryId) {
         if (!categoryDao.existsById(categoryId)) {
             throw new ResourceNotFoundException("Category not found with id: " + categoryId);
         }
 
         return perfumeDao.findByCategory_Id(categoryId).stream()
-                .map(perfumeMapper::toDto)
+                .map(perfumeMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
-
-    public List<PerfumeDto> searchPerfumes(String searchTerm) {
+    public List<PerfumeResponse> searchPerfumes(String searchTerm) {
         return perfumeDao.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(searchTerm, searchTerm).stream()
-                .map(perfumeMapper::toDto)
+                .map(perfumeMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
-    public List<PerfumeDto> getPerfumesByPriceRange(BigDecimal minPrice, BigDecimal maxPrice) {
+    public List<PerfumeResponse> getPerfumesByPriceRange(BigDecimal minPrice, BigDecimal maxPrice) {
         return perfumeDao.findByPriceBetween(minPrice, maxPrice).stream()
-                .map(perfumeMapper::toDto)
+                .map(perfumeMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
-    public List<PerfumeDto> filterPerfumes(String brandName, BigDecimal minPrice, BigDecimal maxPrice) {
+    public List<PerfumeResponse> filterPerfumes(String brandName, BigDecimal minPrice, BigDecimal maxPrice) {
         if (brandName != null && minPrice != null && maxPrice != null) {
             return perfumeDao.findByBrand_NameIgnoreCaseAndPriceBetween(brandName, minPrice, maxPrice).stream()
-                    .map(perfumeMapper::toDto)
+                    .map(perfumeMapper::toResponse)
                     .collect(Collectors.toList());
         } else if (brandName != null) {
             return perfumeDao.findByBrand_NameIgnoreCase(brandName).stream()
-                    .map(perfumeMapper::toDto)
+                    .map(perfumeMapper::toResponse)
                     .collect(Collectors.toList());
         } else if (minPrice != null && maxPrice != null) {
             return getPerfumesByPriceRange(minPrice, maxPrice);
@@ -99,52 +99,52 @@ public class PerfumeService {
         return getAllPerfumes();
     }
 
-    public List<PerfumeDto> getPerfumesByGender(Gender gender) {
+    public List<PerfumeResponse> getPerfumesByGender(Gender gender) {
         return perfumeDao.findByGenderIgnoreCase(gender).stream()
-                .map(perfumeMapper::toDto)
+                .map(perfumeMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
-    public List<PerfumeDto> getPerfumesByFragranceType(FragranceFamily fragrance) {
+    public List<PerfumeResponse> getPerfumesByFragranceType(FragranceFamily fragrance) {
         return perfumeDao.findByFragranceContainingIgnoreCase(fragrance).stream()
-                .map(perfumeMapper::toDto)
+                .map(perfumeMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
-    public List<PerfumeDto> getPerfumesInStock(Integer minStock) {
+    public List<PerfumeResponse> getPerfumesInStock(Integer minStock) {
         return perfumeDao.findByStockQuantityGreaterThan(minStock).stream()
-                .map(perfumeMapper::toDto)
+                .map(perfumeMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public PerfumeDto createPerfume(PerfumeDto perfumeDto) {
-        Brand brand = brandDao.findById(perfumeDto.getBrandId())
-                .orElseThrow(() -> new ResourceNotFoundException("Brand not found with id: " + perfumeDto.getBrandId()));
+    public PerfumeResponse createPerfume(PerfumeRequest perfumeRequest) {
+        Brand brand = brandDao.findById(perfumeRequest.getBrandId())
+                .orElseThrow(() -> new ResourceNotFoundException("Brand not found with id: " + perfumeRequest.getBrandId()));
 
-        Category category = categoryDao.findById(perfumeDto.getCategoryId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + perfumeDto.getCategoryId()));
+        Category category = categoryDao.findById(perfumeRequest.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + perfumeRequest.getCategoryId()));
 
-        Perfume perfume = perfumeMapper.toEntity(perfumeDto, brand, category);
+        Perfume perfume = perfumeMapper.toEntity(perfumeRequest, brand, category);
         Perfume savedPerfume = perfumeDao.save(perfume);
 
-        return perfumeMapper.toDto(savedPerfume);
+        return perfumeMapper.toResponse(savedPerfume);
     }
 
     @Transactional
-    public PerfumeDto updatePerfume(Long id, PerfumeDto perfumeDto) {
+    public PerfumeResponse updatePerfume(Long id, PerfumeRequest perfumeRequest) {
         if (!perfumeDao.existsById(id)) {
             throw new ResourceNotFoundException("Perfume not found with id: " + id);
         }
 
-        Brand brand = getBrandEntity(perfumeDto.getBrandId());
-        Category category = getCategoryEntity(perfumeDto.getCategoryId());
+        Brand brand = getBrandEntity(perfumeRequest.getBrandId());
+        Category category = getCategoryEntity(perfumeRequest.getCategoryId());
 
-        perfumeDto.setId(id);
-        Perfume perfume = perfumeMapper.toEntity(perfumeDto, brand, category);
+        Perfume perfume = perfumeMapper.toEntity(perfumeRequest, brand, category);
+        perfume.setId(id);
         Perfume updatedPerfume = perfumeDao.save(perfume);
 
-        return perfumeMapper.toDto(updatedPerfume);
+        return perfumeMapper.toResponse(updatedPerfume);
     }
 
     @Transactional
@@ -164,5 +164,4 @@ public class PerfumeService {
         return categoryDao.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + categoryId));
     }
-
 }

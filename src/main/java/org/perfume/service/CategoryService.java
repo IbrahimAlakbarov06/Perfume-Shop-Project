@@ -2,7 +2,8 @@ package org.perfume.service;
 
 import lombok.RequiredArgsConstructor;
 import org.perfume.dao.CategoryDao;
-import org.perfume.dto.CategoryDto;
+import org.perfume.dto.request.CategoryRequest;
+import org.perfume.dto.response.CategoryResponse;
 import org.perfume.entity.Category;
 import org.perfume.exception.ResourceNotFoundException;
 import org.perfume.mapper.CategoryMapper;
@@ -19,58 +20,58 @@ public class CategoryService {
     private final CategoryDao categoryDao;
     private final CategoryMapper categoryMapper;
 
-    public List<CategoryDto> getAllCategories() {
+    public List<CategoryResponse> getAllCategories() {
         return categoryDao.findAll().stream()
-                .map(categoryMapper::toDto)
+                .map(categoryMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
-    public CategoryDto getCategoryById(Long id) {
+    public CategoryResponse getCategoryById(Long id) {
         Category category = categoryDao.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
 
-        return categoryMapper.toDto(category);
+        return categoryMapper.toResponse(category);
     }
 
-    public CategoryDto getCategoryByName(String name) {
+    public CategoryResponse getCategoryByName(String name) {
         Category category = categoryDao.findByNameIgnoreCase(name)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with name: " + name));
 
-        return categoryMapper.toDto(category);
+        return categoryMapper.toResponse(category);
     }
 
-    public List<CategoryDto> searchCategories(String searchTerm) {
+    public List<CategoryResponse> searchCategories(String searchTerm) {
         return categoryDao.findByNameContainingIgnoreCase(searchTerm).stream()
-                .map(categoryMapper::toDto)
+                .map(categoryMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public CategoryDto createCategory(CategoryDto categoryDto) {
-        if (categoryDao.existsByNameIgnoreCase(categoryDto.getName())) {
-            throw new IllegalArgumentException("Category with name '" + categoryDto.getName() + "' already exists");
+    public CategoryResponse createCategory(CategoryRequest categoryRequest) {
+        if (categoryDao.existsByNameIgnoreCase(categoryRequest.getName())) {
+            throw new IllegalArgumentException("Category with name '" + categoryRequest.getName() + "' already exists");
         }
 
-        Category category = categoryMapper.toEntity(categoryDto);
+        Category category = categoryMapper.toEntity(categoryRequest);
         Category savedCategory = categoryDao.save(category);
-        return categoryMapper.toDto(savedCategory);
+        return categoryMapper.toResponse(savedCategory);
     }
 
     @Transactional
-    public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
+    public CategoryResponse updateCategory(Long id, CategoryRequest categoryRequest) {
         Category existingCategory = categoryDao.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
 
-        if (!existingCategory.getName().equalsIgnoreCase(categoryDto.getName()) &&
-                categoryDao.existsByNameIgnoreCase(categoryDto.getName())) {
-            throw new IllegalArgumentException("Category with name '" + categoryDto.getName() + "' already exists");
+        if (!existingCategory.getName().equalsIgnoreCase(categoryRequest.getName()) &&
+                categoryDao.existsByNameIgnoreCase(categoryRequest.getName())) {
+            throw new IllegalArgumentException("Category with name '" + categoryRequest.getName() + "' already exists");
         }
 
-        existingCategory.setName(categoryDto.getName());
-        existingCategory.setDescription(categoryDto.getDescription());
+        existingCategory.setName(categoryRequest.getName());
+        existingCategory.setDescription(categoryRequest.getDescription());
 
         Category updatedCategory = categoryDao.save(existingCategory);
-        return categoryMapper.toDto(updatedCategory);
+        return categoryMapper.toResponse(updatedCategory);
     }
 
     @Transactional

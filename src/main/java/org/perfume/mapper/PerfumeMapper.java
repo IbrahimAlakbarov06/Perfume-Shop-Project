@@ -1,61 +1,61 @@
 package org.perfume.mapper;
 
-import org.perfume.dto.PerfumeDto;
-import org.perfume.entity.Perfume;
+import org.perfume.dto.request.PerfumeRequest;
+import org.perfume.dto.response.PerfumeResponse;
 import org.perfume.entity.Brand;
 import org.perfume.entity.Category;
+import org.perfume.entity.Perfume;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PerfumeMapper {
 
-    public PerfumeDto toDto(Perfume perfume) {
+    public PerfumeResponse toResponse(Perfume perfume) {
         if (perfume == null) {
             return null;
         }
 
-        PerfumeDto dto = new PerfumeDto();
-        dto.setId(perfume.getId());
-        dto.setName(perfume.getName());
-        dto.setDescription(perfume.getDescription());
-        dto.setPrice(perfume.getPrice());
-        dto.setVolumeMl(perfume.getVolumeMl());
+        PerfumeResponse response = new PerfumeResponse();
+        response.setId(perfume.getId());
+        response.setName(perfume.getName());
+        response.setDescription(perfume.getDescription());
+        response.setPrice(perfume.getPrice());
+        response.setVolumeMl(perfume.getVolumeMl());
 
         if (perfume.getBrand() != null) {
-            dto.setBrandId(perfume.getBrand().getId());
-            dto.setBrandName(perfume.getBrand().getName());
+            response.setBrandId(perfume.getBrand().getId());
+            response.setBrandName(perfume.getBrand().getName());
         }
 
         if (perfume.getCategory() != null) {
-            dto.setCategoryId(perfume.getCategory().getId());
-            dto.setCategoryName(perfume.getCategory().getName());
+            response.setCategoryId(perfume.getCategory().getId());
+            response.setCategoryName(perfume.getCategory().getName());
         }
 
-        dto.setStockQuantity(perfume.getStockQuantity());
-        dto.setImageUrl(perfume.getImageUrl());
-        dto.setFragranceFamily(perfume.getFragranceFamily());
-        dto.setGender(perfume.getGender());
+        response.setStockQuantity(perfume.getStockQuantity());
+        response.setImageUrl(perfume.getImageUrl());
+        response.setFragranceFamily(perfume.getFragranceFamily());
+        response.setGender(perfume.getGender());
 
-        return dto;
+        return response;
     }
 
-    public Perfume toEntity(PerfumeDto dto, Brand brand, Category category) {
-        if (dto == null) {
+    public Perfume toEntity(PerfumeRequest request, Brand brand, Category category) {
+        if (request == null) {
             return null;
         }
 
         Perfume perfume = new Perfume();
-        perfume.setId(dto.getId());
-        perfume.setName(dto.getName());
-        perfume.setDescription(dto.getDescription());
-        perfume.setPrice(dto.getPrice());
-        perfume.setVolumeMl(dto.getVolumeMl());
+        perfume.setName(request.getName());
+        perfume.setDescription(request.getDescription());
+        perfume.setPrice(request.getPrice());
+        perfume.setVolumeMl(request.getVolumeMl());
         perfume.setBrand(brand);
         perfume.setCategory(category);
-        perfume.setStockQuantity(dto.getStockQuantity());
-        perfume.setImageUrl(dto.getImageUrl());
-        perfume.setFragranceFamily(dto.getFragranceFamily());
-        perfume.setGender(dto.getGender());
+        perfume.setStockQuantity(request.getStockQuantity());
+        perfume.setImageUrl(request.getImageUrl());
+        perfume.setFragranceFamily(request.getFragranceFamily());
+        perfume.setGender(request.getGender());
 
         return perfume;
     }

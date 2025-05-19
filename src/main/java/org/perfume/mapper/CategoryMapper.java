@@ -1,34 +1,34 @@
 package org.perfume.mapper;
 
-import org.perfume.dto.CategoryDto;
+import org.perfume.dto.request.CategoryRequest;
+import org.perfume.dto.response.CategoryResponse;
 import org.perfume.entity.Category;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CategoryMapper {
 
-    public CategoryDto toDto(Category category) {
+    public CategoryResponse toResponse(Category category) {
         if (category == null) {
             return null;
         }
 
-        CategoryDto dto = new CategoryDto();
-        dto.setId(category.getId());
-        dto.setName(category.getName());
-        dto.setDescription(category.getDescription());
+        CategoryResponse response = new CategoryResponse();
+        response.setId(category.getId());
+        response.setName(category.getName());
+        response.setDescription(category.getDescription());
 
-        return dto;
+        return response;
     }
 
-    public Category toEntity(CategoryDto dto) {
-        if (dto == null) {
+    public Category toEntity(CategoryRequest request) {
+        if (request == null) {
             return null;
         }
 
         Category category = new Category();
-        category.setId(dto.getId());
-        category.setName(dto.getName());
-        category.setDescription(dto.getDescription());
+        category.setName(request.getName());
+        category.setDescription(request.getDescription());
 
         return category;
     }

@@ -1,36 +1,36 @@
 package org.perfume.mapper;
 
-import org.perfume.dto.BrandDto;
+import org.perfume.dto.request.BrandRequest;
+import org.perfume.dto.response.BrandResponse;
 import org.perfume.entity.Brand;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BrandMapper {
 
-    public BrandDto toDto(Brand brand) {
+    public BrandResponse toResponse(Brand brand) {
         if (brand == null) {
             return null;
         }
 
-        BrandDto dto = new BrandDto();
-        dto.setId(brand.getId());
-        dto.setName(brand.getName());
-        dto.setDescription(brand.getDescription());
-        dto.setLogoUrl(brand.getLogoUrl());
+        BrandResponse response = new BrandResponse();
+        response.setId(brand.getId());
+        response.setName(brand.getName());
+        response.setDescription(brand.getDescription());
+        response.setLogoUrl(brand.getLogoUrl());
 
-        return dto;
+        return response;
     }
 
-    public Brand toEntity(BrandDto dto) {
-        if (dto == null) {
+    public Brand toEntity(BrandRequest request) {
+        if (request == null) {
             return null;
         }
 
         Brand brand = new Brand();
-        brand.setId(dto.getId());
-        brand.setName(dto.getName());
-        brand.setDescription(dto.getDescription());
-        brand.setLogoUrl(dto.getLogoUrl());
+        brand.setName(request.getName());
+        brand.setDescription(request.getDescription());
+        brand.setLogoUrl(request.getLogoUrl());
 
         return brand;
     }

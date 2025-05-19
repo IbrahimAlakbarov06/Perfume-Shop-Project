@@ -2,7 +2,8 @@ package org.perfume.service;
 
 import lombok.RequiredArgsConstructor;
 import org.perfume.dao.BrandDao;
-import org.perfume.dto.BrandDto;
+import org.perfume.dto.request.BrandRequest;
+import org.perfume.dto.response.BrandResponse;
 import org.perfume.entity.Brand;
 import org.perfume.exception.ResourceNotFoundException;
 import org.perfume.mapper.BrandMapper;
@@ -19,58 +20,58 @@ public class BrandService {
     private final BrandDao brandDao;
     private final BrandMapper brandMapper;
 
-    public List<BrandDto> getAllBrands() {
+    public List<BrandResponse> getAllBrands() {
         return brandDao.findAll().stream()
-                .map(brandMapper::toDto)
+                .map(brandMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
-    public BrandDto getBrandById(Long id) {
+    public BrandResponse getBrandById(Long id) {
         Brand brand = brandDao.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Brand not found with id: " + id));
 
-        return brandMapper.toDto(brand);
+        return brandMapper.toResponse(brand);
     }
 
-    public BrandDto getBrandByName(String name) {
+    public BrandResponse getBrandByName(String name) {
         Brand brand = brandDao.findByNameIgnoreCase(name)
                 .orElseThrow(() -> new ResourceNotFoundException("Brand not found with name: " + name));
-        return brandMapper.toDto(brand);
+        return brandMapper.toResponse(brand);
     }
 
-    public List<BrandDto> searchBrands(String searchTerm) {
+    public List<BrandResponse> searchBrands(String searchTerm) {
         return brandDao.findByNameContainingIgnoreCase(searchTerm).stream()
-                .map(brandMapper::toDto)
+                .map(brandMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public BrandDto createBrand(BrandDto brandDto) {
-        if (brandDao.existsByNameIgnoreCase(brandDto.getName())) {
-            throw new IllegalArgumentException("Brand with name '" + brandDto.getName() + "' already exists");
+    public BrandResponse createBrand(BrandRequest brandRequest) {
+        if (brandDao.existsByNameIgnoreCase(brandRequest.getName())) {
+            throw new IllegalArgumentException("Brand with name '" + brandRequest.getName() + "' already exists");
         }
 
-        Brand brand = brandMapper.toEntity(brandDto);
+        Brand brand = brandMapper.toEntity(brandRequest);
         Brand savedBrand = brandDao.save(brand);
-        return brandMapper.toDto(savedBrand);
+        return brandMapper.toResponse(savedBrand);
     }
 
     @Transactional
-    public BrandDto updateBrand(Long id, BrandDto brandDto) {
+    public BrandResponse updateBrand(Long id, BrandRequest brandRequest) {
         Brand existingBrand = brandDao.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Brand not found with id: " + id));
 
-        if (!existingBrand.getName().equalsIgnoreCase(brandDto.getName()) &&
-                brandDao.existsByNameIgnoreCase(brandDto.getName())) {
-            throw new IllegalArgumentException("Brand with name '" + brandDto.getName() + "' already exists");
+        if (!existingBrand.getName().equalsIgnoreCase(brandRequest.getName()) &&
+                brandDao.existsByNameIgnoreCase(brandRequest.getName())) {
+            throw new IllegalArgumentException("Brand with name '" + brandRequest.getName() + "' already exists");
         }
 
-        existingBrand.setName(brandDto.getName());
-        existingBrand.setDescription(brandDto.getDescription());
-        existingBrand.setLogoUrl(brandDto.getLogoUrl());
+        existingBrand.setName(brandRequest.getName());
+        existingBrand.setDescription(brandRequest.getDescription());
+        existingBrand.setLogoUrl(brandRequest.getLogoUrl());
 
         Brand updatedBrand = brandDao.save(existingBrand);
-        return brandMapper.toDto(updatedBrand);
+        return brandMapper.toResponse(updatedBrand);
     }
 
     @Transactional
@@ -80,5 +81,4 @@ public class BrandService {
         }
         brandDao.deleteById(id);
     }
-
 }
