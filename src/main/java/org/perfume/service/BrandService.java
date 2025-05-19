@@ -1,10 +1,16 @@
 package org.perfume.service;
 
 import lombok.RequiredArgsConstructor;
+<<<<<<< HEAD
 import org.perfume.dao.BrandDao;
 import org.perfume.dto.request.BrandRequest;
 import org.perfume.dto.response.BrandResponse;
 import org.perfume.entity.Brand;
+=======
+import org.perfume.domain.repo.BrandDao;
+import org.perfume.model.dto.response.BrandDto;
+import org.perfume.domain.entity.Brand;
+>>>>>>> 37e4850 (packages updated)
 import org.perfume.exception.ResourceNotFoundException;
 import org.perfume.mapper.BrandMapper;
 import org.springframework.stereotype.Service;

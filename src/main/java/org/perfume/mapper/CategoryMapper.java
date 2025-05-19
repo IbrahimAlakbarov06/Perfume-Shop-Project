@@ -1,8 +1,13 @@
 package org.perfume.mapper;
 
+<<<<<<< HEAD
 import org.perfume.dto.request.CategoryRequest;
 import org.perfume.dto.response.CategoryResponse;
 import org.perfume.entity.Category;
+=======
+import org.perfume.model.dto.response.CategoryDto;
+import org.perfume.domain.entity.Category;
+>>>>>>> 37e4850 (packages updated)
 import org.springframework.stereotype.Component;
 
 @Component

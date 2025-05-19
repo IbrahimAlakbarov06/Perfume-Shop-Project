@@ -1,7 +1,12 @@
 package org.perfume.exception;
 
+<<<<<<< HEAD
 import org.perfume.dto.response.ErrorResponse;
 import org.perfume.dto.response.ValidationErrorResponse;
+=======
+import org.perfume.model.dto.response.ErrorResponse;
+import org.perfume.model.dto.response.ValidationErrorResponse;
+>>>>>>> 37e4850 (packages updated)
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
