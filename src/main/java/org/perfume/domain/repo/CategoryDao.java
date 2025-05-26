@@ -9,11 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface CategoryDao extends JpaRepository<Category, Long> {
-    Optional<Category> findByNameIgnoreCase(String name);
 
-    // Check if a category exists by name
-    boolean existsByNameIgnoreCase(String name);
-
-    // Search categories by name containing a string
-    List<Category> findByNameContainingIgnoreCase(String searchTerm);
 }

@@ -9,11 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface BrandDao extends JpaRepository<Brand, Long> {
-    Optional<Brand> findByNameIgnoreCase(String name);
 
-    // Check if a brand exists by name (helpful for validation)
-    boolean existsByNameIgnoreCase(String name);
-
-    // Search brands by name containing a string (for search functionality)
-    List<Brand> findByNameContainingIgnoreCase(String searchTerm);
 }
