@@ -1,4 +1,3 @@
-
 package org.perfume.model.dto.response;
 
 import lombok.AllArgsConstructor;
